@@ -1,3 +1,8 @@
+var bugs = [
+    { id: "101", status: "Open", priority: "High", owner: "Fred", title: "Page Fault" },
+    { id: "102", status: "Test", priority: "Low", owner: "Barney", title: "General Protection Fault" }    
+];
+
 var BugList = React.createClass({
     render: function() {
         return(
@@ -5,10 +10,7 @@ var BugList = React.createClass({
                 <h1>Bug Tracker</h1>
                 <BugFilter />
                 <hr />
-                <BugTable>
-                    <BugRow id="1" status="Open" priority="High" owner="Fred" title="Page Fault" />
-                    <BugRow id="2" status="Test" priority="Low" owner="Barney" title="General Protection Fault" />
-                </BugTable>
+                <BugTable bugs={this.props.bugs} />
                 <hr />
                 <BugAdd />
             </div>
@@ -28,6 +30,11 @@ var BugFilter = React.createClass({
 
 var BugTable = React.createClass({
     render: function() {
+        var bugRows = this.props.bugs.map(function(bug) {
+           return (
+               <BugRow key={bug.id} bug={bug} />
+           );
+        });
         return(
             <table>
                 <thead>
@@ -40,7 +47,7 @@ var BugTable = React.createClass({
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.children}
+                    {bugRows}
                 </tbody>
             </table>
         );
@@ -52,11 +59,11 @@ var BugRow = React.createClass({
     render: function() {
         return(
             <tr>
-                <td>{this.props.id}</td>
-                <td>{this.props.status}</td>
-                <td>{this.props.priority}</td>
-                <td>{this.props.owner}</td>
-                <td>{this.props.title}</td>
+                <td>{this.props.bug.id}</td>
+                <td>{this.props.bug.status}</td>
+                <td>{this.props.bug.priority}</td>
+                <td>{this.props.bug.owner}</td>
+                <td>{this.props.bug.title}</td>
             </tr>
         );
     }
@@ -75,6 +82,6 @@ var BugAdd = React.createClass({
 
 
 ReactDOM.render(
-    <BugList />,
+    <BugList bugs={bugs} />,
     document.getElementById('main')
 );

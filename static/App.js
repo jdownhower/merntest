@@ -1,3 +1,5 @@
+var bugs = [{ id: "101", status: "Open", priority: "High", owner: "Fred", title: "Page Fault" }, { id: "102", status: "Test", priority: "Low", owner: "Barney", title: "General Protection Fault" }];
+
 var BugList = React.createClass({
     displayName: "BugList",
 
@@ -12,12 +14,7 @@ var BugList = React.createClass({
             ),
             React.createElement(BugFilter, null),
             React.createElement("hr", null),
-            React.createElement(
-                BugTable,
-                null,
-                React.createElement(BugRow, { id: "1", status: "Open", priority: "High", owner: "Fred", title: "Page Fault" }),
-                React.createElement(BugRow, { id: "2", status: "Test", priority: "Low", owner: "Barney", title: "General Protection Fault" })
-            ),
+            React.createElement(BugTable, { bugs: this.props.bugs }),
             React.createElement("hr", null),
             React.createElement(BugAdd, null)
         );
@@ -40,6 +37,9 @@ var BugTable = React.createClass({
     displayName: "BugTable",
 
     render: function () {
+        var bugRows = this.props.bugs.map(function (bug) {
+            return React.createElement(BugRow, { key: bug.id, bug: bug });
+        });
         return React.createElement(
             "table",
             null,
@@ -79,7 +79,7 @@ var BugTable = React.createClass({
             React.createElement(
                 "tbody",
                 null,
-                this.props.children
+                bugRows
             )
         );
     }
@@ -96,27 +96,27 @@ var BugRow = React.createClass({
             React.createElement(
                 "td",
                 null,
-                this.props.id
+                this.props.bug.id
             ),
             React.createElement(
                 "td",
                 null,
-                this.props.status
+                this.props.bug.status
             ),
             React.createElement(
                 "td",
                 null,
-                this.props.priority
+                this.props.bug.priority
             ),
             React.createElement(
                 "td",
                 null,
-                this.props.owner
+                this.props.bug.owner
             ),
             React.createElement(
                 "td",
                 null,
-                this.props.title
+                this.props.bug.title
             )
         );
     }
@@ -134,4 +134,4 @@ var BugAdd = React.createClass({
     }
 });
 
-ReactDOM.render(React.createElement(BugList, null), document.getElementById('main'));
+ReactDOM.render(React.createElement(BugList, { bugs: bugs }), document.getElementById('main'));
