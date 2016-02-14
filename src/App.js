@@ -1,16 +1,19 @@
-var bugs = [
+var bugData = [
     { id: "101", status: "Open", priority: "High", owner: "Fred", title: "Page Fault" },
     { id: "102", status: "Test", priority: "Low", owner: "Barney", title: "General Protection Fault" }    
 ];
 
 var BugList = React.createClass({
+    getInitialState: function() {
+        return {data: bugData};  
+    },
     render: function() {
         return(
             <div>
                 <h1>Bug Tracker</h1>
                 <BugFilter />
                 <hr />
-                <BugTable bugs={this.props.bugs} />
+                <BugTable bugs={this.state.data} />
                 <hr />
                 <BugAdd />
             </div>
@@ -82,6 +85,6 @@ var BugAdd = React.createClass({
 
 
 ReactDOM.render(
-    <BugList bugs={bugs} />,
+    <BugList />,
     document.getElementById('main')
 );

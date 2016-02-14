@@ -1,8 +1,11 @@
-var bugs = [{ id: "101", status: "Open", priority: "High", owner: "Fred", title: "Page Fault" }, { id: "102", status: "Test", priority: "Low", owner: "Barney", title: "General Protection Fault" }];
+var bugData = [{ id: "101", status: "Open", priority: "High", owner: "Fred", title: "Page Fault" }, { id: "102", status: "Test", priority: "Low", owner: "Barney", title: "General Protection Fault" }];
 
 var BugList = React.createClass({
     displayName: "BugList",
 
+    getInitialState: function () {
+        return { data: bugData };
+    },
     render: function () {
         return React.createElement(
             "div",
@@ -14,7 +17,7 @@ var BugList = React.createClass({
             ),
             React.createElement(BugFilter, null),
             React.createElement("hr", null),
-            React.createElement(BugTable, { bugs: this.props.bugs }),
+            React.createElement(BugTable, { bugs: this.state.data }),
             React.createElement("hr", null),
             React.createElement(BugAdd, null)
         );
@@ -134,4 +137,4 @@ var BugAdd = React.createClass({
     }
 });
 
-ReactDOM.render(React.createElement(BugList, { bugs: bugs }), document.getElementById('main'));
+ReactDOM.render(React.createElement(BugList, null), document.getElementById('main'));
