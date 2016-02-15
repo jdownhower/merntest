@@ -57,9 +57,21 @@ var BugAdd = React.createClass({
         console.log("Rendering BugAdd");
         return(
             <div>
-                Hello, I am a BugAdd...a form to add a new bug
+                <form name="bugAdd">
+                    <input type="text" name="owner" placeholder="Owner" />
+                    <input type="text" name="title" placeholder="Title" />
+                    <button onClick={this.handleSubmit}>Add Bug</button>
+                </form>
             </div>
         );
+    },
+    handleSubmit: function(e) {
+        e.preventDefault();
+        var form = document.forms.bugAdd;
+        this.props.addBug({owner: form.owner.value, title: form.title.value, status: "New", priority: "P1"});
+        // clear the form
+        form.owner.value = "";
+        form.title.value = "";
     }
 });
 
@@ -80,20 +92,16 @@ var BugList = React.createClass({
                 <BugFilter />
                 <hr />
                 <BugTable bugs={this.state.bugs} />
-                <button onClick={this.testNewBug}>Add Bug</button>
                 <hr />
-                <BugAdd />
+                <BugAdd addBug={this.addBug} />
             </div>
         );
-    },
-    testNewBug: function() {
-        var nextId = this.state.bugs.length + 1;
-        this.addBug({id: nextId, status: "Open", priority: "High", owner: "Fred", title: "Test bug" });
     },
     addBug: function(bug) {
         console.log("Adding bug:", bug);
         // Do not modify the state, it's immutable, so make a copy
         var bugsModified = this.state.bugs.slice();
+        bug.id = this.state.bugs.length + 1;
         bugsModified.push(bug);
         this.setState({bugs: bugsModified});
     }

@@ -110,8 +110,26 @@ var BugAdd = React.createClass({
         return React.createElement(
             "div",
             null,
-            "Hello, I am a BugAdd...a form to add a new bug"
+            React.createElement(
+                "form",
+                { name: "bugAdd" },
+                React.createElement("input", { type: "text", name: "owner", placeholder: "Owner" }),
+                React.createElement("input", { type: "text", name: "title", placeholder: "Title" }),
+                React.createElement(
+                    "button",
+                    { onClick: this.handleSubmit },
+                    "Add Bug"
+                )
+            )
         );
+    },
+    handleSubmit: function (e) {
+        e.preventDefault();
+        var form = document.forms.bugAdd;
+        this.props.addBug({ owner: form.owner.value, title: form.title.value, status: "New", priority: "P1" });
+        // clear the form
+        form.owner.value = "";
+        form.title.value = "";
     }
 });
 
@@ -136,23 +154,15 @@ var BugList = React.createClass({
             React.createElement(BugFilter, null),
             React.createElement("hr", null),
             React.createElement(BugTable, { bugs: this.state.bugs }),
-            React.createElement(
-                "button",
-                { onClick: this.testNewBug },
-                "Add Bug"
-            ),
             React.createElement("hr", null),
-            React.createElement(BugAdd, null)
+            React.createElement(BugAdd, { addBug: this.addBug })
         );
-    },
-    testNewBug: function () {
-        var nextId = this.state.bugs.length + 1;
-        this.addBug({ id: nextId, status: "Open", priority: "High", owner: "Fred", title: "Test bug" });
     },
     addBug: function (bug) {
         console.log("Adding bug:", bug);
         // Do not modify the state, it's immutable, so make a copy
         var bugsModified = this.state.bugs.slice();
+        bug.id = this.state.bugs.length + 1;
         bugsModified.push(bug);
         this.setState({ bugs: bugsModified });
     }
