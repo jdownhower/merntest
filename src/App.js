@@ -75,14 +75,9 @@ var BugAdd = React.createClass({
     }
 });
 
-var bugData = [
-    { id: "101", status: "Open", priority: "High", owner: "Fred", title: "Page Fault" },
-    { id: "102", status: "Test", priority: "Low", owner: "Barney", title: "General Protection Fault" }    
-];
-
 var BugList = React.createClass({
     getInitialState: function() {
-        return {bugs: bugData};  
+        return {bugs: []};  
     },
     render: function() {
         console.log("Rendering BugList, num items:", this.state.bugs.length);
@@ -104,6 +99,19 @@ var BugList = React.createClass({
         bug.id = this.state.bugs.length + 1;
         bugsModified.push(bug);
         this.setState({bugs: bugsModified});
+    },
+    componentDidMount: function() {
+        $.ajax({
+            url: '/api/bugs',
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                this.setState({bugs: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error('/api/bugs', status, err.toString());
+            }.bind(this)
+        });
     }
 
 });
