@@ -94,11 +94,21 @@ var BugList = React.createClass({
     },
     addBug: function(bug) {
         console.log("Adding bug:", bug);
-        // Do not modify the state, it's immutable, so make a copy
-        var bugsModified = this.state.bugs.slice();
-        bug.id = this.state.bugs.length + 1;
-        bugsModified.push(bug);
-        this.setState({bugs: bugsModified});
+        $.ajax({
+            url: '/api/bugs',
+            contentType: 'application/json',
+            type: 'POST',
+            data: JSON.stringify(bug),
+            success: function(data) {
+                console.log("Adding data:", data);
+                var bug = data;
+                var busModified = this.state.bugs.concat(bug);
+                this.setState({bugs: busModified});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error('/api/bugs', status, err.toString());
+            }.bind(this)
+        });
     },
     componentDidMount: function() {
         $.ajax({
