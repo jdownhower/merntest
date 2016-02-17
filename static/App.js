@@ -1,47 +1,51 @@
+var $ = require('jquery');
+var React = require('react');
+var ReactDOM = require('react-dom');
+
 var BugFilter = React.createClass({
-    displayName: "BugFilter",
+    displayName: 'BugFilter',
 
     render: function () {
         console.log("Rendering BugFilter");
         return React.createElement(
-            "div",
+            'div',
             null,
-            "Hello, I am a BugFilter...a filter"
+            'Hello, I am a BugFilter...a filter'
         );
     }
 });
 
 // Single table row for a bug
 var BugRow = React.createClass({
-    displayName: "BugRow",
+    displayName: 'BugRow',
 
     render: function () {
         console.log("Rendering BugRow");
         return React.createElement(
-            "tr",
+            'tr',
             null,
             React.createElement(
-                "td",
+                'td',
                 null,
                 this.props.bug._id
             ),
             React.createElement(
-                "td",
+                'td',
                 null,
                 this.props.bug.status
             ),
             React.createElement(
-                "td",
+                'td',
                 null,
                 this.props.bug.priority
             ),
             React.createElement(
-                "td",
+                'td',
                 null,
                 this.props.bug.owner
             ),
             React.createElement(
-                "td",
+                'td',
                 null,
                 this.props.bug.title
             )
@@ -50,7 +54,7 @@ var BugRow = React.createClass({
 });
 
 var BugTable = React.createClass({
-    displayName: "BugTable",
+    displayName: 'BugTable',
 
     render: function () {
         console.log("Rendering BugTable, num items:", this.props.bugs.length);
@@ -58,43 +62,43 @@ var BugTable = React.createClass({
             return React.createElement(BugRow, { key: bug._id, bug: bug });
         });
         return React.createElement(
-            "table",
+            'table',
             null,
             React.createElement(
-                "thead",
+                'thead',
                 null,
                 React.createElement(
-                    "tr",
+                    'tr',
                     null,
                     React.createElement(
-                        "th",
+                        'th',
                         null,
-                        "ID"
+                        'ID'
                     ),
                     React.createElement(
-                        "th",
+                        'th',
                         null,
-                        "Status"
+                        'Status'
                     ),
                     React.createElement(
-                        "th",
+                        'th',
                         null,
-                        "Priority"
+                        'Priority'
                     ),
                     React.createElement(
-                        "th",
+                        'th',
                         null,
-                        "Owner"
+                        'Owner'
                     ),
                     React.createElement(
-                        "th",
+                        'th',
                         null,
-                        "Title"
+                        'Title'
                     )
                 )
             ),
             React.createElement(
-                "tbody",
+                'tbody',
                 null,
                 bugRows
             )
@@ -103,22 +107,22 @@ var BugTable = React.createClass({
 });
 
 var BugAdd = React.createClass({
-    displayName: "BugAdd",
+    displayName: 'BugAdd',
 
     render: function () {
         console.log("Rendering BugAdd");
         return React.createElement(
-            "div",
+            'div',
             null,
             React.createElement(
-                "form",
-                { name: "bugAdd" },
-                React.createElement("input", { type: "text", name: "owner", placeholder: "Owner" }),
-                React.createElement("input", { type: "text", name: "title", placeholder: "Title" }),
+                'form',
+                { name: 'bugAdd' },
+                React.createElement('input', { type: 'text', name: 'owner', placeholder: 'Owner' }),
+                React.createElement('input', { type: 'text', name: 'title', placeholder: 'Title' }),
                 React.createElement(
-                    "button",
+                    'button',
                     { onClick: this.handleSubmit },
-                    "Add Bug"
+                    'Add Bug'
                 )
             )
         );
@@ -134,7 +138,7 @@ var BugAdd = React.createClass({
 });
 
 var BugList = React.createClass({
-    displayName: "BugList",
+    displayName: 'BugList',
 
     getInitialState: function () {
         return { bugs: [] };
@@ -142,17 +146,17 @@ var BugList = React.createClass({
     render: function () {
         console.log("Rendering BugList, num items:", this.state.bugs.length);
         return React.createElement(
-            "div",
+            'div',
             null,
             React.createElement(
-                "h1",
+                'h1',
                 null,
-                "Bug Tracker"
+                'Bug Tracker'
             ),
             React.createElement(BugFilter, null),
-            React.createElement("hr", null),
+            React.createElement('hr', null),
             React.createElement(BugTable, { bugs: this.state.bugs }),
-            React.createElement("hr", null),
+            React.createElement('hr', null),
             React.createElement(BugAdd, { addBug: this.addBug })
         );
     },
