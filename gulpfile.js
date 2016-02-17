@@ -3,7 +3,6 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var watchify = require('watchify');
 
-
 gulp.task('bundle', function(){
     return browserify('src/App.js')
         .transform('babelify', {presets: ['react']})
@@ -14,10 +13,9 @@ gulp.task('bundle', function(){
         .pipe(gulp.dest("static/"));
 });
 
-
 gulp.task('watch', function(){
     var b = browserify({
-        entries: ['src/App.js'],
+        entries: ['src/App.jsx','src/BugAdd.jsx','src/BugFilter.jsx','src/BugList.jsx'],
         cache: {},
         packageCache: {},
         plugin: ['watchify']

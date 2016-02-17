@@ -28864,18 +28864,71 @@ module.exports = validateDOMNesting;
 module.exports = require('./lib/React');
 
 },{"./lib/React":54}],160:[function(require,module,exports){
-var $ = require('jquery');
 var React = require('react');
 var ReactDOM = require('react-dom');
+var BugList = require('./BugList.jsx');
+
+ReactDOM.render(React.createElement(BugList, null), document.getElementById('main'));
+
+},{"./BugList.jsx":163,"react":159,"react-dom":30}],161:[function(require,module,exports){
+var React = require('react');
+
+var BugAdd = React.createClass({
+    displayName: "BugAdd",
+
+    render: function () {
+        console.log("Rendering BugAdd");
+        return React.createElement(
+            "div",
+            null,
+            React.createElement(
+                "form",
+                { name: "bugAdd" },
+                React.createElement("input", { type: "text", name: "owner", placeholder: "Owner" }),
+                React.createElement("input", { type: "text", name: "title", placeholder: "Title" }),
+                React.createElement(
+                    "button",
+                    { onClick: this.handleSubmit },
+                    "Add Bug"
+                )
+            )
+        );
+    },
+    handleSubmit: function (e) {
+        e.preventDefault();
+        var form = document.forms.bugAdd;
+        this.props.addBug({ owner: form.owner.value, title: form.title.value, status: "New", priority: "P1" });
+        // clear the form
+        form.owner.value = "";
+        form.title.value = "";
+    }
+});
+
+module.exports = BugAdd;
+
+},{"react":159}],162:[function(require,module,exports){
+var React = require('react');
 
 var BugFilter = React.createClass({
-    displayName: 'BugFilter',
+    displayName: "BugFilter",
 
     render: function () {
         console.log("Rendering BugFilter");
-        return React.createElement('div', null, 'Hello, I am a BugFilter...a filter');
+        return React.createElement(
+            "div",
+            null,
+            "Hello, I am a BugFilter...a filter"
+        );
     }
 });
+
+module.exports = BugFilter;
+
+},{"react":159}],163:[function(require,module,exports){
+var $ = require('jquery');
+var React = require('react');
+var BugAdd = require('./BugAdd.jsx');
+var BugFilter = require('./BugFilter.jsx');
 
 // Single table row for a bug
 var BugRow = React.createClass({
@@ -28896,23 +28949,6 @@ var BugTable = React.createClass({
             return React.createElement(BugRow, { key: bug._id, bug: bug });
         });
         return React.createElement('table', null, React.createElement('thead', null, React.createElement('tr', null, React.createElement('th', null, 'ID'), React.createElement('th', null, 'Status'), React.createElement('th', null, 'Priority'), React.createElement('th', null, 'Owner'), React.createElement('th', null, 'Title'))), React.createElement('tbody', null, bugRows));
-    }
-});
-
-var BugAdd = React.createClass({
-    displayName: 'BugAdd',
-
-    render: function () {
-        console.log("Rendering BugAdd");
-        return React.createElement('div', null, React.createElement('form', { name: 'bugAdd' }, React.createElement('input', { type: 'text', name: 'owner', placeholder: 'Owner' }), React.createElement('input', { type: 'text', name: 'title', placeholder: 'Title' }), React.createElement('button', { onClick: this.handleSubmit }, 'Add Bug')));
-    },
-    handleSubmit: function (e) {
-        e.preventDefault();
-        var form = document.forms.bugAdd;
-        this.props.addBug({ owner: form.owner.value, title: form.title.value, status: "New", priority: "P1" });
-        // clear the form
-        form.owner.value = "";
-        form.title.value = "";
     }
 });
 
@@ -28960,6 +28996,6 @@ var BugList = React.createClass({
 
 });
 
-ReactDOM.render(React.createElement(BugList, null), document.getElementById('main'));
+module.exports = BugList;
 
-},{"jquery":28,"react":159,"react-dom":30}]},{},[160]);
+},{"./BugAdd.jsx":161,"./BugFilter.jsx":162,"jquery":28,"react":159}]},{},[160,161,162,163]);
