@@ -55,7 +55,7 @@ var BugList = React.createClass({
         return(
             <div>
                 <h1>Bug Tracker</h1>
-                <BugFilter />
+                <BugFilter submitHandler={this.loadData}/>
                 <hr />
                 <BugTable bugs={this.state.bugs} />
                 <hr />
@@ -82,19 +82,24 @@ var BugList = React.createClass({
         });
     },
     componentDidMount: function() {
+        this.loadData({});
+    },
+    loadData: function(filter) {
         $.ajax({
             url: '/api/bugs',
             dataType: 'json',
             cache: false,
+            data: filter,
             success: function(data) {
                 this.setState({bugs: data});
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error('/api/bugs', status, err.toString());
             }.bind(this)
-        });
+        });  
     }
 
 });
+
 
 module.exports = BugList;
