@@ -26,7 +26,8 @@ var BugFilter = React.createClass({
         );
     },
     getInitialState: function() {
-        return {status: "", priority: ""};
+        var initFilter = this.props.initFilter;
+        return {status: initFilter.status, priority: initFilter.priority};
     },
     onChangeStatus: function(e) {
         this.setState({status: e.target.value});
@@ -35,7 +36,10 @@ var BugFilter = React.createClass({
         this.setState({priority: e.target.value});
     },
     submit: function(e) {
-        this.props.submitHandler(this.state);
+        var newFilter = {};
+        if (this.state.priority) newFilter.priority = this.state.priority;
+        if (this.state.status) newFilter.status = this.state.status;
+        this.props.submitHandler(newFilter);
     }
 });
 

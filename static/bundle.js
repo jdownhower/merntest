@@ -33102,74 +33102,11 @@ var BugFilter = React.createClass({
 
     render: function () {
         console.log("Rendering BugFilter");
-        return React.createElement(
-            "div",
-            null,
-            React.createElement(
-                "h3",
-                null,
-                "Filter"
-            ),
-            "Status:",
-            React.createElement(
-                "select",
-                { value: this.state.status, onChange: this.onChangeStatus },
-                React.createElement(
-                    "option",
-                    { value: "" },
-                    "(Any)"
-                ),
-                React.createElement(
-                    "option",
-                    { value: "New" },
-                    "New"
-                ),
-                React.createElement(
-                    "option",
-                    { value: "Open" },
-                    "Open"
-                ),
-                React.createElement(
-                    "option",
-                    { value: "Closed" },
-                    "Closed"
-                )
-            ),
-            React.createElement("br", null),
-            "Priority:",
-            React.createElement(
-                "select",
-                { value: this.state.priority, onChange: this.onChangePriority },
-                React.createElement(
-                    "option",
-                    { value: "" },
-                    "(Any)"
-                ),
-                React.createElement(
-                    "option",
-                    { value: "P1" },
-                    "P1"
-                ),
-                React.createElement(
-                    "option",
-                    { value: "P2" },
-                    "P2"
-                ),
-                React.createElement(
-                    "option",
-                    { value: "P3" },
-                    "P3"
-                )
-            ),
-            React.createElement(
-                "button",
-                { onClick: this.submit },
-                "Apply"
-            )
-        );
+        return React.createElement("div", null, React.createElement("h3", null, "Filter"), "Status:", React.createElement("select", { value: this.state.status, onChange: this.onChangeStatus }, React.createElement("option", { value: "" }, "(Any)"), React.createElement("option", { value: "New" }, "New"), React.createElement("option", { value: "Open" }, "Open"), React.createElement("option", { value: "Closed" }, "Closed")), React.createElement("br", null), "Priority:", React.createElement("select", { value: this.state.priority, onChange: this.onChangePriority }, React.createElement("option", { value: "" }, "(Any)"), React.createElement("option", { value: "P1" }, "P1"), React.createElement("option", { value: "P2" }, "P2"), React.createElement("option", { value: "P3" }, "P3")), React.createElement("button", { onClick: this.submit }, "Apply"));
     },
     getInitialState: function () {
-        return { status: "", priority: "" };
+        var initFilter = this.props.initFilter;
+        return { status: initFilter.status, priority: initFilter.priority };
     },
     onChangeStatus: function (e) {
         this.setState({ status: e.target.value });
@@ -33178,7 +33115,10 @@ var BugFilter = React.createClass({
         this.setState({ priority: e.target.value });
     },
     submit: function (e) {
-        this.props.submitHandler(this.state);
+        var newFilter = {};
+        if (this.state.priority) newFilter.priority = this.state.priority;
+        if (this.state.status) newFilter.status = this.state.status;
+        this.props.submitHandler(newFilter);
     }
 });
 
@@ -33196,35 +33136,7 @@ var BugRow = React.createClass({
 
     render: function () {
         console.log("Rendering BugRow");
-        return React.createElement(
-            'tr',
-            null,
-            React.createElement(
-                'td',
-                null,
-                this.props.bug._id
-            ),
-            React.createElement(
-                'td',
-                null,
-                this.props.bug.status
-            ),
-            React.createElement(
-                'td',
-                null,
-                this.props.bug.priority
-            ),
-            React.createElement(
-                'td',
-                null,
-                this.props.bug.owner
-            ),
-            React.createElement(
-                'td',
-                null,
-                this.props.bug.title
-            )
-        );
+        return React.createElement('tr', null, React.createElement('td', null, this.props.bug._id), React.createElement('td', null, this.props.bug.status), React.createElement('td', null, this.props.bug.priority), React.createElement('td', null, this.props.bug.owner), React.createElement('td', null, this.props.bug.title));
     }
 });
 
@@ -33236,48 +33148,7 @@ var BugTable = React.createClass({
         var bugRows = this.props.bugs.map(function (bug) {
             return React.createElement(BugRow, { key: bug._id, bug: bug });
         });
-        return React.createElement(
-            'table',
-            null,
-            React.createElement(
-                'thead',
-                null,
-                React.createElement(
-                    'tr',
-                    null,
-                    React.createElement(
-                        'th',
-                        null,
-                        'ID'
-                    ),
-                    React.createElement(
-                        'th',
-                        null,
-                        'Status'
-                    ),
-                    React.createElement(
-                        'th',
-                        null,
-                        'Priority'
-                    ),
-                    React.createElement(
-                        'th',
-                        null,
-                        'Owner'
-                    ),
-                    React.createElement(
-                        'th',
-                        null,
-                        'Title'
-                    )
-                )
-            ),
-            React.createElement(
-                'tbody',
-                null,
-                bugRows
-            )
-        );
+        return React.createElement('table', null, React.createElement('thead', null, React.createElement('tr', null, React.createElement('th', null, 'ID'), React.createElement('th', null, 'Status'), React.createElement('th', null, 'Priority'), React.createElement('th', null, 'Owner'), React.createElement('th', null, 'Title'))), React.createElement('tbody', null, bugRows));
     }
 });
 
@@ -33289,20 +33160,7 @@ var BugList = React.createClass({
     },
     render: function () {
         console.log("Rendering BugList, num items:", this.state.bugs.length);
-        return React.createElement(
-            'div',
-            null,
-            React.createElement(
-                'h1',
-                null,
-                'Bug Tracker'
-            ),
-            React.createElement(BugFilter, { submitHandler: this.loadData }),
-            React.createElement('hr', null),
-            React.createElement(BugTable, { bugs: this.state.bugs }),
-            React.createElement('hr', null),
-            React.createElement(BugAdd, { addBug: this.addBug })
-        );
+        return React.createElement('div', null, React.createElement('h1', null, 'Bug Tracker'), React.createElement(BugFilter, { submitHandler: this.changeFilter, initFilter: this.props.location.query }), React.createElement('hr', null), React.createElement(BugTable, { bugs: this.state.bugs }), React.createElement('hr', null), React.createElement(BugAdd, { addBug: this.addBug }));
     },
     addBug: function (bug) {
         console.log("Adding bug:", bug);
@@ -33338,6 +33196,10 @@ var BugList = React.createClass({
                 console.error('/api/bugs', status, err.toString());
             }.bind(this)
         });
+    },
+    changeFilter: function (newFilter) {
+        this.props.history.push({ search: '?' + $.param(newFilter) });
+        this.loadData(newFilter);
     }
 
 });
