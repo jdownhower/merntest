@@ -33101,12 +33101,84 @@ var BugFilter = React.createClass({
     displayName: "BugFilter",
 
     render: function () {
-        console.log("Rendering BugFilter");
-        return React.createElement("div", null, React.createElement("h3", null, "Filter"), "Status:", React.createElement("select", { value: this.state.status, onChange: this.onChangeStatus }, React.createElement("option", { value: "" }, "(Any)"), React.createElement("option", { value: "New" }, "New"), React.createElement("option", { value: "Open" }, "Open"), React.createElement("option", { value: "Closed" }, "Closed")), React.createElement("br", null), "Priority:", React.createElement("select", { value: this.state.priority, onChange: this.onChangePriority }, React.createElement("option", { value: "" }, "(Any)"), React.createElement("option", { value: "P1" }, "P1"), React.createElement("option", { value: "P2" }, "P2"), React.createElement("option", { value: "P3" }, "P3")), React.createElement("button", { onClick: this.submit }, "Apply"));
+        console.log("Rendering BugFilter, state=", this.state);
+        return React.createElement(
+            "div",
+            null,
+            React.createElement(
+                "h3",
+                null,
+                "Filter"
+            ),
+            "Status:",
+            React.createElement(
+                "select",
+                { value: this.state.status, onChange: this.onChangeStatus },
+                React.createElement(
+                    "option",
+                    { value: "" },
+                    "(Any)"
+                ),
+                React.createElement(
+                    "option",
+                    { value: "New" },
+                    "New"
+                ),
+                React.createElement(
+                    "option",
+                    { value: "Open" },
+                    "Open"
+                ),
+                React.createElement(
+                    "option",
+                    { value: "Closed" },
+                    "Closed"
+                )
+            ),
+            React.createElement("br", null),
+            "Priority:",
+            React.createElement(
+                "select",
+                { value: this.state.priority, onChange: this.onChangePriority },
+                React.createElement(
+                    "option",
+                    { value: "" },
+                    "(Any)"
+                ),
+                React.createElement(
+                    "option",
+                    { value: "P1" },
+                    "P1"
+                ),
+                React.createElement(
+                    "option",
+                    { value: "P2" },
+                    "P2"
+                ),
+                React.createElement(
+                    "option",
+                    { value: "P3" },
+                    "P3"
+                )
+            ),
+            React.createElement(
+                "button",
+                { onClick: this.submit },
+                "Apply"
+            )
+        );
     },
     getInitialState: function () {
         var initFilter = this.props.initFilter;
         return { status: initFilter.status, priority: initFilter.priority };
+    },
+    componentWillReceiveProps: function (newProps) {
+        if (newProps.initFilter.status === this.state.status && newProps.initFilter.priority === this.state.priority) {
+            console.log("BugFilter: componentWillReceiveProps, no change");
+            return;
+        }
+        console.log("BugFilter: componentWillReceiveProps, new filter:", newProps.initFilter);
+        this.setState({ status: newProps.initFilter.status, priority: newProps.initFilter.priority });
     },
     onChangeStatus: function (e) {
         this.setState({ status: e.target.value });
@@ -33181,6 +33253,7 @@ var BugList = React.createClass({
         });
     },
     componentDidMount: function () {
+        console.log("BugList: componentDidMount");
         this.loadData({});
     },
     loadData: function (filter) {
@@ -33199,7 +33272,17 @@ var BugList = React.createClass({
     },
     changeFilter: function (newFilter) {
         this.props.history.push({ search: '?' + $.param(newFilter) });
-        this.loadData(newFilter);
+    },
+    componentDidUpdate: function (prevProps) {
+        var prevFilter = prevProps.location.query;
+        var newFilter = this.props.location.query;
+        if (newFilter.priority === prevFilter.priority && newFilter.status === prevFilter.status) {
+            console.log("BugList: componentDidUpdate, no change in filter, not update");
+            return;
+        } else {
+            console.log("BugList: componentDidUpdate, loading data with new filter");
+            this.loadData(newFilter);
+        }
     }
 
 });

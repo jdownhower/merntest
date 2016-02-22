@@ -82,6 +82,7 @@ var BugList = React.createClass({
         });
     },
     componentDidMount: function() {
+        console.log("BugList: componentDidMount");
         this.loadData({});
     },
     loadData: function(filter) {
@@ -100,7 +101,18 @@ var BugList = React.createClass({
     },
     changeFilter: function(newFilter) {
         this.props.history.push({search: '?' + $.param(newFilter)});
-        this.loadData(newFilter);
+    },
+    componentDidUpdate: function(prevProps) {
+        var prevFilter = prevProps.location.query;
+        var newFilter = this.props.location.query;
+        if (newFilter.priority === prevFilter.priority &&
+                newFilter.status === prevFilter.status) {
+            console.log("BugList: componentDidUpdate, no change in filter, not update");
+            return;
+        } else {
+            console.log("BugList: componentDidUpdate, loading data with new filter");
+            this.loadData(newFilter);
+        }
     }
 
 });
